@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Solution {
+public class Solution{
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int T = sc.nextInt();
@@ -14,9 +14,9 @@ public class Solution {
 				value += farm.charAt(N/2) - '0';
 				
 				if(i <= N/2) {
-					for(int j = 0 ; j < i ; j++) {
-						value += farm.charAt(N/2 + (j+1)) - '0';
-						value += farm.charAt(N/2 - (j+1)) - '0';
+					for(int j = 1 ; j <= i ; j++) {
+						value += farm.charAt(N/2 + j) - '0';
+						value += farm.charAt(N/2 - j) - '0';
 					}
 				}
 				else {
