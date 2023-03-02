@@ -23,29 +23,45 @@ public class Solution {
 			//관문 개수 파악 후 설치하기
 			for(int i = 1 ; i <= N-D ; i++) {
 				boolean isDoor = false; //관문의 유무 확인
+				
+				//1. 현 위치에 관문이 있을 때
+				//- i+1 ~ i+D까지의 관문을 모두 살펴본다
+				//	- 범위 내에 관문이 없으면 i+D에 관문 설치
+				//	- 있으면 다음 pass로 넘어가기
 				if(map[i]) {
+					//범위 내 관문 유무 확인
 					for(int j = 1 ; j <= D ; j++) {
 						if(map[i+j]) {
 							isDoor = true;
 							break;
 						}
 					}
-					if(isDoor == false) {
+					//관문이 없다면 i+D에 관문 설치
+					if(!isDoor) {
 						map[i+D] = true;
 						cnt++;
 					}
 				}
 				
+				//2. 현 위치에 관문이 없을 때
+				//- i+1 ~ i+D-1까지의 관문을 모두 살펴본다
+				//	- 범위 내에 관문이 없으면
+				//		- i에 관문 설치
+				//		- i+D에도 관문에 없으면 i+D에도 관문 설치
+				//	- 있으면 다음 pass로 넘어가기
 				else {
+					//범위 내 관문 유무 확인
 					for(int j = 1 ; j < D ; j++) {
 						if(map[i+j]) {
 							isDoor = true;
 							break;
 						}
 					}
+					//관문이 없다면 i에 관문 설치
 					if(!isDoor) {
 						map[i] = true;
 						cnt++;
+						//i+D에도 관문에 없으면 i+D에도 관문 설치
 						if(!map[i+D]) {
 							map[i+D] = true;
 							cnt++;
@@ -53,6 +69,8 @@ public class Solution {
 					}
 				}
 			}
+			
+			//출력
 			sb.append("#" + tc + " " + cnt+"\n");
 		}
 		
