@@ -1,44 +1,41 @@
 import java.util.Scanner;
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{		
-			
+public class Solution {
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-	
-		for(int test_case = 1; test_case <= 10; test_case++)
-		{
-			int T = sc.nextInt();
-			int[][] ladder = new int [100][100]; //사다리판
-			int c_col = 0; //현재 지점의 col 좌표 : X 지점의 col 인덱스를 할당받을 예정
-			int c_row = 99; //현재 지점의 row 좌표 : X 지점의 row 인데스를 할당받을 예정
+		for(int tc = 1 ; tc <= 10 ; tc++) {
 			
-			//입력받기
+			int N = sc.nextInt();
+			
+			int cr = 0; //현위치
+			int cc = 0; //현위치
+			
+			int[][] ladder = new int[100][100];
 			for(int i = 0 ; i < 100 ; i++) {
 				for(int j = 0 ; j < 100 ; j++) {
 					ladder[i][j] = sc.nextInt();
-					if(ladder[i][j] == 2) { c_col = j; } //X 지점 찾기
+					if(ladder[i][j] == 2) {
+						cr = i;
+						cc = j;
+					}
 				}
 			}
 			
-			//사다리 역으로 타기
-			while(c_row != 0) {
-				if(c_col != 0 && ladder[c_row][c_col - 1] == 1){ 
-					ladder[c_row][c_col - 1] = 2;
-					c_col--; 
-				}
-				else if(c_col != 99 && ladder[c_row][c_col + 1] == 1) { 
-					ladder[c_row][c_col + 1] = 2;
-					c_col++; 
-				}				
-				else if(ladder[c_row - 1][c_col] == 1) { 
-					ladder[c_row - 1][c_col] = 2; 
-					c_row--; 
-				}	
+			//한칸 위로 올라가기
+			cr--;
+			
+			while(cr != 0) {
+				ladder[cr][cc] = 2; //방문한 곳은 2로 바꾸기
+				
+				//좌우 확인
+				if(cc > 0 && ladder[cr][cc - 1] == 1) { cc--; }
+				else if(cc < 99 && ladder[cr][cc + 1] == 1) { cc++; }
+				//좌우 길이 없으면 위로
+				else { cr--; }											
 			}
 			
-			System.out.printf("#%d %d\n", T, c_col);
+			
+			System.out.printf("#%d %d\n", tc, cc);
 		}
 	}
 }
