@@ -1,54 +1,48 @@
+import java.util.Arrays;
 import java.util.Scanner;
-import java.io.FileInputStream;
 
-
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
+public class Solution {
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-	
-		for(int test_case = 1; test_case <= 10; test_case++)
-		{           
-			int T = sc.nextInt(); //테스트 케이스
-            int sum_x = 0; //가로합
-            int sum_y =0; //세로합
-            int max = 0; // 최댓값
-            int[][] arr = new int[100][100]; //입력 배열
+		
+		for(int tc = 1 ; tc <= 10 ; tc++) {
+			int n = sc.nextInt();
+			int[][] arr = new int[100][100];
+			for(int i = 0 ; i < 100 ; i++) {
+				for(int j = 0 ; j < 100 ; j++) {
+					arr[i][j] = sc.nextInt();
+				}
+			}
+			
+			int max = 0;
+			int sum_r = 0;
+			int sum_c = 0;
+			
+			for(int i = 0 ; i < 100 ; i++) {
+				sum_r = 0;
+				sum_c = 0;
+				
+				for(int j = 0 ; j < 100 ; j++) {
+					sum_r += arr[i][j];
+					sum_c += arr[j][i];
+				}
+				
+				if(sum_r > max) max = sum_r;
+				if(sum_c > max) max = sum_c;
+			}
+			
+			sum_r = 0;
+			sum_c = 0;
+			//대각선 검사
+			for(int i = 0 ; i < 100; i++) {
+				sum_r += arr[i][i];
+				sum_c += arr[i][99-i];
+			}
 
-
-            //입력받기
-            for(int i = 0 ; i < 100 ; i++) {
-                for(int j = 0 ; j < 100 ; j++) {
-                    arr[i][j] = sc.nextInt();
-                }
-            }
-
-            //가로세로 합 및 최댓값 구하기
-            for(int i = 0 ; i < 100 ; i++) {
-                sum_x = 0; //합계 값 초기화
-                sum_y = 0; //합계 값 초기화
-                for(int j = 0 ; j < 100 ; j++) {
-                    sum_x += arr[i][j]; //가로합
-                    sum_y += arr[j][i]; //세로합
-                }
-                //최댓값 구하기
-                if(max < sum_x) { max = sum_x; }
-                if(max < sum_y) { max = sum_y; }
-            }
-
-            //대각선 합 및 최댓값 구하기
-            sum_x = 0; //합계 값 초기화
-            sum_y = 0; //합계 값 초기화
-            for(int i = 0 ; i < 100 ; i++) {
-                sum_x += arr[i][i]; //우하향 대각선 합
-                sum_y += arr[i][99-i]; //좌하향 대각선 합
-                //최댓값 구하기
-                if(max < sum_x) { max = sum_x; }
-                if(max < sum_y) { max = sum_y; }
-            }
-
-            System.out.printf("#%d %d\n", T, max);
+			if(sum_r > max) max = sum_r;
+			if(sum_c > max) max = sum_c;
+			
+			System.out.printf("#%d %d\n", n, max);
 		}
 	}
 }
