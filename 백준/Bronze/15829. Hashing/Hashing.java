@@ -1,10 +1,7 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
-	
-	static final int M = 1234567891;
-	
+    
 	public static void main(String[] args) throws IOException {
 		
 		//1. 입력 받기	
@@ -12,22 +9,19 @@ public class Main {
 		int L = Integer.parseInt(br.readLine());
 		String str = br.readLine();
 		
-		//2. 배열 만들기
-		int[] arr = new int[str.length()];
-		//알파벳 변환해서 넣기
-		for(int i = 0 ; i < str.length() ; i++) arr[i] = str.charAt(i) - 96;
-		
 		//3. 계산하기
 		long answer = 0;
-		for(int i = 0 ; i < arr.length ; i++) {
+		long r = 1;
+		
+		for(int i = 0 ; i < str.length() ; i++) {
+			int n = str.charAt(i) - 96;
 			//r의 거듭제곱 구하기
-			long r = 1;
-			for(int j = 0 ; j < i ; j++) r *= 31;
-			
+			if(i > 0) r *= 31;
+
 			//더하기
-			answer += arr[i] * r % M;
+			answer += n * (r % 1234567891);
 		}
 		
-		System.out.println(answer);
+		System.out.println(answer % 1234567891);
 	}
 }
