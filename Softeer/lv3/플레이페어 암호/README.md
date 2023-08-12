@@ -1,6 +1,6 @@
-# [level 3] 성적 평균
+# [level 3] 플레이페어 암호
 
-[문제 링크](https://softeer.ai/practice/info.do?idx=1&eid=389&sw_prbl_sbms_sn=247876)
+[문제 링크](https://softeer.ai/practice/info.do?idx=1&eid=804)
 
 ### 성능 요약
 
