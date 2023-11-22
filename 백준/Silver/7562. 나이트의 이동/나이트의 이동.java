@@ -1,52 +1,68 @@
+// 05:10
+
 import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int T = Integer.parseInt(br.readLine());
-		for(int testcase = 0 ; testcase < T ; testcase++) {
-			// 변수 입력 받기
-			int N = Integer.parseInt(br.readLine());
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int cr = Integer.parseInt(st.nextToken());
-			int cc = Integer.parseInt(st.nextToken());
-			st = new StringTokenizer(br.readLine());
-			int tr = Integer.parseInt(st.nextToken());
-			int tc = Integer.parseInt(st.nextToken());
-			int cnt = 0;
-			boolean[][] visit = new boolean[N][N];
-			
-			if(cr == tr && cc == tc){
-				System.out.println(0);
-				continue;
-			}
-			
-			Deque<int[]> q = new ArrayDeque<>();
-			int[] dr = { -1,-2,-2,-1,1,2,2,1 };
-			int[] dc = { -2,-1,1,2,2,1,-1,-2 };
-			
-			int[] pt = {cr,cc, 0};
-			q.offerLast(pt);
-			
-			outer : while(!q.isEmpty()) {
-				pt = q.pollFirst();
-				cr = pt[0];
-				cc = pt[1];
-				cnt = pt[2];
-				for(int i = 0 ; i < 8 ; i++) {
-					int[] np = {cr+dr[i], cc+dc[i], cnt + 1};
-					if(np[0] == tr && np[1] == tc) {
-						System.out.println(np[2]);
-						break outer;
-					}
-					if(np[0] < 0 || np[1] < 0 || np[0] >= N || np[1] >= N || visit[np[0]][np[1]]) continue;
-					q.offerLast(np);
-					visit[np[0]][np[1]] = true;
-					
-				}
-			}
-			
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        StringBuilder sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int test = Integer.parseInt(br.readLine());
+
+        int[] dr = {-1,-2,-2,-1,1,2,2,1};
+        int[] dc = {-2,-1,1,2,2,1,-1,-2};
+
+        for(int t = 0 ; t < test ; t++) {
+            int answer = 0;
+
+            int I = Integer.parseInt(br.readLine());
+
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int sr = Integer.parseInt(st.nextToken());
+            int sc = Integer.parseInt(st.nextToken());
+
+            st = new StringTokenizer(br.readLine());
+            int tr = Integer.parseInt(st.nextToken());
+            int tc = Integer.parseInt(st.nextToken());
+
+            int[][] chess = new int[I][I];
+            boolean[][] isVisited = new boolean[I][I];
+
+            // BFS
+            ArrayDeque<int[]> q = new ArrayDeque<>();
+            q.offerLast(new int[]{sr,sc,0});
+            isVisited[sr][sc] = true;
+            outer: while(!q.isEmpty()) {
+                int cr = q.peekFirst()[0];
+                int cc = q.peekFirst()[1];
+                int cn = q.pollFirst()[2];
+
+                for(int dir = 0 ; dir < 8 ; dir++) {
+                    int nr = cr + dr[dir];
+                    int nc = cc + dc[dir];
+
+                    // idx chk
+                    if(nr < 0 || nc < 0 || nr >= I || nc >= I) continue;
+
+                    // visited
+                    if(isVisited[nr][nc]) continue;
+
+                    if(nr == tr && nc == tc){
+                        answer = cn + 1;
+                        break outer;
+                    }
+
+                    isVisited[nr][nc] = true;
+                    q.offerLast(new int[]{nr,nc,cn+1});
+                }
+
+            }
+
+            sb.append(answer).append("\n");
+
+        }
+
+        System.out.println(sb);
+    }
 }
