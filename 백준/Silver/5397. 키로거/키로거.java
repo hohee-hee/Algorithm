@@ -2,42 +2,46 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		// 1. 입력 받기 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
+    public static void main(String[] args) throws IOException{
         StringBuilder sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+
         for(int tc = 0 ; tc < T ; tc++) {
-        	String log = br.readLine();
-        	ArrayDeque<Character> preStack = new ArrayDeque<>();
-        	ArrayDeque<Character> postStack = new ArrayDeque<>();
-        	for(int i = 0 ; i < log.length() ; i++) {        		
-        		if(log.charAt(i) == '-') {
-        			if(preStack.isEmpty()) continue;
-        			preStack.pollLast();
-        		}
-        		else if(log.charAt(i) == '<') {
-        			if(preStack.isEmpty()) continue;
-        			postStack.offerLast(preStack.pollLast());
-        		}
-        		else if(log.charAt(i) == '>') {
-        			if(postStack.isEmpty()) continue;
-        			preStack.offerLast(postStack.pollLast());
-        		}
-        		else {
-        			preStack.offerLast(log.charAt(i));
-        		}
-        	}
-        	
-        	while(!preStack.isEmpty()) {
-        		sb.append(preStack.pollFirst());
-        	}
-        	while(!postStack.isEmpty()) {
-        		sb.append(postStack.pollLast());
-        	}
-        	sb.append("\n");
+            String log = br.readLine();
+
+            ArrayDeque<Character> left = new ArrayDeque<>();
+            ArrayDeque<Character> right = new ArrayDeque<>();
+
+            for(int i = 0 ; i < log.length() ; i++) {
+                char ch = log.charAt(i);
+                if(ch == '<') {
+                    if(left.isEmpty()) continue;
+
+                    char tmp = left.pollLast();
+                    right.offerFirst(tmp);
+                } else if(ch == '>') {
+                    if(right.isEmpty()) continue;
+
+                    char tmp = right.pollFirst();
+                    left.offerLast(tmp);
+                } else if(ch == '-') {
+                    if(left.isEmpty()) continue;
+
+                    left.pollLast();
+                } else {
+                    left.offerLast(ch);
+                }
+            }
+
+
+            while(!left.isEmpty()) sb.append(left.pollFirst());
+            while(!right.isEmpty()) sb.append(right.pollFirst());
+            sb.append('\n');
+
         }
+
         System.out.println(sb);
-		
-	}
+    }
 }
