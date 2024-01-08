@@ -1,69 +1,76 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int[] queue;
-	static int front = -1, rear = -1;
- 	static StringBuilder sb = new StringBuilder();
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-		queue = new int[N];
-		for(int i = 0 ; i < N ; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			switch(st.nextToken()) {
-			case "push":
-				push(Integer.parseInt(st.nextToken()));
-				break;
-			case "pop":
-				pop();
-				break;
-			case "size":
-				size();
-				break;
-			case "empty":
-				isEmpty();
-				break;
-			case "front":
-				front();
-				break;
-			case "back":
-				back();
-				break;
-			}
-		}
-		System.out.println(sb);
-	}
-	
-	static void push(int x) {
-		if(rear != queue.length -1) queue[++rear] = x;
-	}
-	
-	static void pop() {
-		if(front == rear) sb.append(-1).append("\n");
-		else {
-			sb.append(queue[++front]).append("\n");
-		}
-	}
-	
-	static void size() {
-		sb.append(rear-front).append("\n");
-	}
+    public static int[] queue = new int[2000001];
+    public static int head = 0;
+    public static int cur = 0;
 
-	static void isEmpty() {
-		if(front == rear) sb.append(1).append("\n");
-		else sb.append(0).append("\n");
-	}
-	
-	static void front() {
-		if(front == rear) sb.append(-1).append("\n");
-		else sb.append(queue[front+1]).append("\n");
-	}
-	
-	static void back() {
-		if(front == rear) sb.append(-1).append("\n");
-		else sb.append(queue[rear]).append("\n");
-	}
+    public static void main(String[] args) throws IOException{
+        StringBuilder sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+
+        for(int tc = 0 ; tc < N ; tc++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            String command = st.nextToken();
+
+            switch(command) {
+                case "pop":
+                    sb.append(pop()).append("\n");
+                    break;
+                case "size":
+                    sb.append(size()).append("\n");
+                    break;
+                case "empty":
+                    sb.append(empty()).append("\n");
+                    break;
+                case "front":
+                    sb.append(front()).append("\n");
+                    break;
+                case "back":
+                    sb.append(back()).append("\n");
+                    break;
+                default: // push
+                    int x = Integer.parseInt(st.nextToken());
+                    push(x);
+                    break;
+            }
+        }
+
+
+        System.out.println(sb);
+    }
+
+    public static void push(int x) {
+        queue[cur] = x;
+        cur++;
+    }
+
+    public static int pop() {
+        if(head == cur) return -1;
+
+        int num = queue[head++];
+        return num;
+    }
+
+    public static int size() {
+        return cur - head;
+    }
+
+    public static int empty() {
+        if(head == cur) return 1;
+        return 0;
+    }
+
+    public static int front() {
+        if(head == cur) return -1;
+        return queue[head];
+    }
+
+    public static int back() {
+        if(head == cur) return -1;
+        return queue[cur-1];
+    }
 }
