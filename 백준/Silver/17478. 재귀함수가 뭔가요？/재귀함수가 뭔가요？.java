@@ -1,44 +1,40 @@
-
 import java.io.*;
+import java.util.*;
 
-public class Main {	
+public class Main {
+    public static StringBuilder sb;
+    public static void main(String[] args) throws IOException{
+        sb = new StringBuilder();
 
-	static String[] st = { 
-			"\"재귀함수가 뭔가요?\"", 
-			"\"잘 들어보게. 옛날옛날 한 산 꼭대기에 이세상 모든 지식을 통달한 선인이 있었어.",
-			"마을 사람들은 모두 그 선인에게 수많은 질문을 했고, 모두 지혜롭게 대답해 주었지.",
-			"그의 답은 대부분 옳았다고 하네. 그런데 어느 날, 그 선인에게 한 선비가 찾아와서 물었어.\"" };
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-		int std = N;
-		System.out.println("어느 한 컴퓨터공학과 학생이 유명한 교수님을 찾아가 물었다.");
-		bot(std,N);
-	}
-	
-	public static void bot(int std, int n) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
 
-		if(n < 0) {
-			return;
-		}
-		
-		String indent = "";
-		int cnt = 4*(std - n); //들어갈 '_'의 개수
-		for(int i = 0 ; i < cnt ; i++) { indent += "_"; }
-		
-		if(n > 0) {
-			for(int i = 0 ; i < 4 ; i++) {			
-				System.out.println(indent+st[i]);
-			}
-		}
-		else if(n == 0) {
-			System.out.println(indent+st[0]);
-			System.out.println(indent+"\"재귀함수는 자기 자신을 호출하는 함수라네\"");
-		}
-		bot(std,n-1);
-		
-		System.out.println(indent+"라고 답변하였지.");
-		
-	}
+        sb.append("어느 한 컴퓨터공학과 학생이 유명한 교수님을 찾아가 물었다.").append("\n");
+
+        recursive(N, 0);
+        System.out.println(sb);
+    }
+
+    public static void recursive(int N, int cnt){
+        if(cnt > N) return;
+
+        String prefix = "";
+        for(int i = 1 ; i <= cnt ; i++) {
+            prefix += "____";
+        }
+
+        sb.append(prefix).append("\"재귀함수가 뭔가요?\"").append("\n");
+        if(cnt == N) sb.append(prefix).append("\"재귀함수는 자기 자신을 호출하는 함수라네\"").append("\n");
+        else {
+            sb.append(prefix).append("\"잘 들어보게. 옛날옛날 한 산 꼭대기에 이세상 모든 지식을 통달한 선인이 있었어.").append("\n");
+            sb.append(prefix).append("마을 사람들은 모두 그 선인에게 수많은 질문을 했고, 모두 지혜롭게 대답해 주었지.").append("\n");
+            sb.append(prefix).append("그의 답은 대부분 옳았다고 하네. 그런데 어느 날, 그 선인에게 한 선비가 찾아와서 물었어.\"").append("\n");
+        }
+
+        recursive(N, cnt+1);
+
+        sb.append(prefix).append("라고 답변하였지.").append("\n");
+
+
+    }
 }
