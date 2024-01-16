@@ -1,50 +1,44 @@
-import java.util.*;
 import java.io.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int N;
-	static int M;
-	static int[] arr;
-	static int[] per;
-	static StringBuilder sb;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		sb = new StringBuilder();
-		// 변수 입력 받기
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		st = new StringTokenizer(br.readLine());
-		arr = new int[N];
-		per = new int[M];
-		for(int i = 0 ; i < N ; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		//차피 앞에서부터 오름차순으로 출력해야하므로 정렬을 먼저하고 출력
-		Arrays.sort(arr);
-		
-		//백트래킹
-		permunation(0);		
-		
-		System.out.println(sb);
-	}
+    public static StringBuilder sb;
+    public static int[] arr, per;
 
-	private static void permunation(int k) {
-		//기저조건
-		if(k == M) {
-			for(int i = 0 ; i < M ; i++) {
-				sb.append(per[i] + " ");
-			}
-			sb.append("\n");
-			return;
-		}
-		
-		for(int i = 0 ; i < N ; i++) {
-			per[k] = arr[i];
-			permunation(k+1);
-		}
-	}
+
+    public static void main(String[] args) throws IOException{
+        sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        arr = new int[N];
+        per = new int[M];
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0 ; i < N ; i++) arr[i] = Integer.parseInt(st.nextToken());
+
+        Arrays.parallelSort(arr);
+
+        bt(0,  N, M);
+
+        System.out.println(sb);
+    }
+
+    public static void bt(int cnt, int N, int M) {
+        if(cnt == M) {
+            for(int i = 0; i < M ; i++) sb.append(per[i]).append(" ");
+            sb.append("\n");
+            return;
+        }
+
+        for(int i = 0; i < N ; i++) {
+            per[cnt] = arr[i];
+            bt(cnt+1, N, M);
+            per[cnt] = 0;
+        }
+
+    }
 }
