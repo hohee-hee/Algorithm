@@ -1,42 +1,37 @@
-
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public class Main{
-	static int N, M;
-	static int[] arr;
-	static boolean[] isUsed;
-	static StringBuilder sb;
-	
-	public static void main(String[] args)  throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		arr = new int[M];
-		isUsed = new boolean[N+1];
+public class Main {
+    public static StringBuilder sb;
+    public static int[] per;
 
-		sb = new StringBuilder();
-		permunation(0);
-		System.out.println(sb);
-		
-	}
-	
-	private static void permunation(int k) {
-		if(k == M) {
-			for(int i = 0 ; i < k ;i++) {
-				sb.append(arr[i] + " ");
-			}
-			sb.append("\n");
-			return;
-		}
-		
-		for(int i = 1; i <= N ; i++) {
-			if(k == 0 || (arr[k-1] <= i && !isUsed[i])) {
-				arr[k] = i;
-				permunation(k+1);
-			}
-		}
-	}
-	
+    public static void main(String[] args) throws IOException{
+        sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        per = new int[M];
+
+        bt(0, 1, N, M);
+
+        System.out.println(sb);
+    }
+
+    public static void bt(int cnt, int pt, int N, int M) {
+        if(cnt == M) {
+            for(int i = 0; i < M ; i++) sb.append(per[i]).append(" ");
+            sb.append("\n");
+            return;
+        }
+
+        for(int i = pt; i <= N ; i++) {
+            per[cnt] = i;
+            bt(cnt+1, i, N, M);
+            per[cnt] = 0;
+        }
+
+    }
 }
