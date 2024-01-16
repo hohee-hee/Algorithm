@@ -1,42 +1,43 @@
-
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public class Main{
-	static int N, M;
-	static int[] arr;
-	static boolean[] isUsed;
-    
-	public static void main(String[] args)  throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		arr = new int[M];
-		isUsed = new boolean[N+1];
-		permunation(0);
-		
-	}
-	
-	private static void permunation(int k) {
-		if(k == M) {
-			for(int i = 0 ; i < k ;i++) {
-				System.out.print(arr[i] + " ");
-			}
-			System.out.println();
-			return;
-		}
-		
-		for(int i = 1; i <= N ; i++) {
-			if(k == 0 || (arr[k-1] < i && !isUsed[i])) {
-				if(!isUsed[i]) {
-					arr[k] = i;
-					isUsed[i] = true;
-					permunation(k+1);
-					isUsed[i] = false;
-				}
-			}
-		}
-	}
-	
+public class Main {
+    public static StringBuilder sb;
+    public static int[] per;
+    public static boolean[] isChosen;
+
+    public static void main(String[] args) throws IOException{
+        sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        per = new int[M];
+        isChosen = new boolean[N+1];
+
+        bt(0, 1, N, M);
+
+        System.out.println(sb);
+    }
+
+    public static void bt(int cnt, int pt, int N, int M) {
+        if(cnt == M) {
+            for(int i = 0; i < M ; i++) sb.append(per[i]).append(" ");
+            sb.append("\n");
+            return;
+        }
+
+        for(int i = pt; i <= N ; i++) {
+            if(isChosen[i]) continue;
+
+            per[cnt] = i;
+            isChosen[i] = true;
+            bt(cnt+1, i+1, N, M);
+            isChosen[i] = false;
+            per[cnt] = 0;
+        }
+
+    }
 }
