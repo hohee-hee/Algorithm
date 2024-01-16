@@ -1,56 +1,54 @@
-
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-	static int N;
-	static int M;
-	static int[] arr;
-	static int[] p;
-	static boolean[] isUsed;
-	static StringBuilder sb;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		sb = new StringBuilder();
-		// 변수 입력 받기
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		st = new StringTokenizer(br.readLine());
-		arr = new int[N];
-		p = new int[M];
-		isUsed = new boolean[N];
-		for(int i = 0 ; i < N ; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		Arrays.sort(arr);
-		
-		BackTracking(0);
-		
-		System.out.println(sb);
-		
-	}
+    public static StringBuilder sb;
+    public static int[] arr, per;
+    public static boolean[] isChosen;
 
-	private static void BackTracking(int idx) {
-		if(idx == M) {
-			for(int i = 0 ; i < M ; i++) {
-				sb.append(p[i] + " ");
-			}
-			sb.append("\n");
-			return;
-		}
-		
-		int pre = 0;
-		for(int i = 0 ; i < N ; i++) {
-			if(!isUsed[i] && pre != arr[i]) {
-				p[idx] = arr[i];
-				pre = p[idx];
-				isUsed[i] = true;
-				BackTracking(idx+1);
-				isUsed[i] = false;
-			}
-		}
-	}
+
+    public static void main(String[] args) throws IOException{
+        sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        arr = new int[N];
+        per = new int[M];
+        isChosen = new boolean[N];
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0 ; i < N ; i++) arr[i] = Integer.parseInt(st.nextToken());
+
+        Arrays.parallelSort(arr);
+
+        bt(0,  N, M);
+
+        System.out.println(sb);
+    }
+
+    public static void bt(int cnt, int N, int M) {
+        if(cnt == M) {
+            for(int i = 0; i < M ; i++) sb.append(per[i]).append(" ");
+            sb.append("\n");
+            return;
+        }
+
+        int prev = 0;
+
+        for(int i = 0; i < N ; i++) {
+            if(isChosen[i]) continue;
+            if(prev == arr[i]) continue;
+
+            per[cnt] = arr[i];
+            prev = per[cnt];
+            isChosen[i] = true;
+            bt(cnt+1, N, M);
+            per[cnt] = 0;
+            isChosen[i] = false;
+        }
+
+    }
 }
-
