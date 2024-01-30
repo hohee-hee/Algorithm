@@ -1,30 +1,21 @@
 import java.io.*;
+import java.util.*;
 
-public class Main{
-	
-	public static void main(String[] args)  throws IOException {
-		
-		//1. 입력 받기		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-        
-        //조기종료 : 1일때
+public class Main {
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
         if(N == 1) {
-			System.out.println(1);
-			return;
-		}
-        
-		long[] fibo = new long[N+1];
-		
-		fibo[1] = 1;
-		fibo[2] = 2;
-		
-		for(int i = 3 ; i <= N ; i++) {
-			fibo[i] = fibo[i-1] + fibo[i-2];
-			fibo[i] %= 10007;
-		}
-		
-		System.out.println(fibo[N]);
-		
-	}
+            System.out.println(1);
+            return;
+        }
+
+        int[] dp = new int[N+1];
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int i = 3 ; i < N+1 ; i++) dp[i] = (dp[i-1] + dp[i-2]) % 10007;
+
+        System.out.println(dp[N]);
+    }
 }
+
