@@ -1,49 +1,24 @@
 import java.io.*;
-
 import java.util.*;
 
 public class Main {
+    public static void main(String[] args) throws IOException{
+        StringBuilder sb = new StringBuilder();
 
-	public static void main(String[] args) throws IOException{		//1. 입력받기
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] dp = new int[N+2];
 
-        
-        // 1. 입력받기
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        for(int i = 1 ; i <= N ; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int period = Integer.parseInt(st.nextToken());
+            int price = Integer.parseInt(st.nextToken());
 
-		int N = Integer.parseInt(br.readLine());
+            if(i+period <= N+1) dp[i + period] = Math.max(dp[i+period], dp[i] + price);
+            dp[i+1] = Math.max(dp[i], dp[i+1]);
+        }
 
-        
-		int[][] schedule = new int[N+1][2]; 
-
-		for(int i = 1 ; i <= N ; i++) {
-
-			StringTokenizer st = new StringTokenizer(br.readLine());
-
-			schedule[i][0] = Integer.parseInt(st.nextToken());
-
-			schedule[i][1] = Integer.parseInt(st.nextToken());
-
-		}
-
-		
-
-		// 2. dp
-
-		int[] dp = new int[N+2];
-
-		for(int i = N ; i > 0 ; i--) {
-
-			if(schedule[i][0] + i > N+1) dp[i] = dp[i+1];
-
-			else dp[i] = Math.max(dp[i+schedule[i][0]] + schedule[i][1], dp[i+1]);
-
-		}
-
-        
-        // 3. 출력
-        
-		System.out.println(dp[1]);
-
-	}
-
+        System.out.println(dp[N+1]);
+    }
 }
+
