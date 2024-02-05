@@ -12,32 +12,26 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i = 1 ; i <= N ; i++) num[i] = Integer.parseInt(st.nextToken());
 
-        int[][] dp = new int[N+1][N+1]; // c: start point, r: length
+        boolean[][] dp = new boolean[N+1][N+1]; // c: start point, r: length
+        for(int s = 1 ; s <= N ; s++) dp[1][s] = true;
+        for(int s = 1 ; s < N ; s++) {
+            if(num[s] == num[s+1]) dp[2][s] = true;
+        }
+        for(int l = 3 ; l <= N ; l++) {
+            for(int s = 1 ; s <= N-l+1; s++) {
+                if(num[s] != num[s+l-1]) dp[l][s] = false;
+                else dp[l][s] = dp[l-2][s+1];
+            }
+        }
+
+
         int M = Integer.parseInt(br.readLine());
-        int lpt = 1;
         for(int m = 0; m < M ; m++) {
             st = new StringTokenizer(br.readLine());
             int S = Integer.parseInt(st.nextToken());
             int E = Integer.parseInt(st.nextToken());
             int len = E-S+1;
-            if(dp[len][S] == 0) {
-                for (int l = lpt; l <= len; l++) {
-                    for (int s = 1; s <= N - l + 1; s++) {
-                        if (l == 1) {
-                            dp[l][s] = 1;
-                        } else if (l == 2) {
-                            if (num[s] == num[s + 1]) dp[l][s] = 1;
-                            else dp[l][s] = -1;
-                        } else {
-                            if (num[s] != num[s + l - 1]) dp[l][s] = -1;
-                            else dp[l][s] = dp[l - 2][s + 1];
-                        }
-                    }
-                }
-                lpt = len + 1;
-            }
-
-            int answer = dp[len][S] == 1 ? 1 : 0;
+            int answer = dp[len][S] ? 1 : 0;
             sb.append(answer).append("\n");
         }
 
