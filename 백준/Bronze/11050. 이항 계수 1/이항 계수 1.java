@@ -2,24 +2,20 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws IOException{
+        StringBuilder sb = new StringBuilder();
 
-            int n = Integer.parseInt(st.nextToken());
-            int k = Integer.parseInt(st.nextToken());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
-            int answer = 1;
-            if(k != 0 && n != k) answer = fact(n) / (fact(k) * fact(n-k));
-            System.out.println(answer);
+        int deno  = 1;
+        int nume = 1;
+        for(int i = 1 ; i <= N ; i++) deno *= i;
+        for(int i = 1 ; i <= N-K ; i++) nume *= i;
+        for(int i = 1 ; i <= K ; i++) nume *= i;
 
-    }
-
-
-    public static int fact(int n) {
-        for(int i = n-1 ; i > 0 ; i--){
-            n *= i;
-        }
-        return n;
+        System.out.println(deno / nume);
     }
 }
