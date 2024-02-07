@@ -6,37 +6,27 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int[] prime = new int[246913];
-        prime[1] = 1;
-        int pt = 1;
+        boolean[] isNotPrime = new boolean[246913];
+        isNotPrime[1] = true;
+        for(int i = 2 ; i < 500 ; i++) {
+            if(isNotPrime[i]) continue;
+            for(int j = i*2 ; j < 246913 ; j+=i) {
+                isNotPrime[j] = true;
+            }
+        }
 
         int n = Integer.parseInt(br.readLine());
         while(n != 0) {
-            if(pt <= 2*n) {
-                for (int i = pt+1; i <= 2 * n; i++) {
-                    if (isPrime(i)) {
-                        prime[i] = prime[i - 1] + 1;
-                    } else {
-                        prime[i] = prime[i - 1];
-                    }
-                }
+            int answer = 0;
+            for(int i = n+1 ; i <= 2*n ; i++) {
+                if(isNotPrime[i]) continue;
+                answer++;
             }
 
-            sb.append(prime[2*n]-prime[n]).append("\n");
-            pt = 2*n;
+            sb.append(answer).append("\n");
             n = Integer.parseInt(br.readLine());
         }
 
         System.out.println(sb);
-    }
-
-    public static boolean isPrime(int num) {
-        if(num == 1) return false;
-
-        for(int i = 2 ; i*i <= num ; i++) {
-            if(num % i == 0) return false;
-        }
-
-        return true;
     }
 }
