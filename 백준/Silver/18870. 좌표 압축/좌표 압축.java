@@ -5,35 +5,35 @@ public class Main {
     public static void main(String[] args) throws IOException{
         StringBuilder sb = new StringBuilder();
 
-        // 1. 입력 받기
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        // 1. 입력 받기
         int N = Integer.parseInt(br.readLine());
+        int[] arr = new int[N];
+        TreeSet<Integer> sorted = new TreeSet<>();
         StringTokenizer st = new StringTokenizer(br.readLine());
-        ArrayList<Integer> list = new ArrayList<>();
-        HashSet<Integer> hs = new HashSet<>();
         for(int i = 0 ; i < N ; i++) {
-            int num = Integer.parseInt(st.nextToken());
-            list.add(num);
-            hs.add(num);
+            arr[i] = Integer.parseInt(st.nextToken());
+            sorted.add(arr[i]);
         }
 
-        // 2. Set을 List로 바꾸기
-        ArrayList<Integer> sorted = new ArrayList<>(hs);
-        Collections.sort(sorted, new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o2-o1;
+        ArrayList<Integer> arr_sorted = new ArrayList<>(sorted);
+
+        // 2. 찾기
+        find: for(int i = 0 ; i < N ; i++) {
+            int target = arr[i];
+            int sp = 0;
+            int ep = arr_sorted.size();
+            int mid = (ep+sp) / 2;
+
+            while(sp < ep) {
+                if(arr_sorted.get(mid) >= target) ep = mid;
+                else sp = mid+1;
+                mid = (ep+sp) / 2;
             }
-        });
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for(int i = 0 ; i < sorted.size() ; i++){
-            map.put(sorted.get(i), i);
-        }
 
-        // 3. 좌표 찾기
-        int len = sorted.size()-1;
-        for (int num : list) {
-            sb.append(len - map.get(num)).append(" ");
+
+            sb.append(sp).append(" ");
         }
         System.out.println(sb);
     }
