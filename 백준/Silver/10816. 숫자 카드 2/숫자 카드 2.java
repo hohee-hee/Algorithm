@@ -2,29 +2,45 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
         StringBuilder sb = new StringBuilder();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        HashMap<Integer, Integer> map = new HashMap<>();
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i = 0 ; i < N ; i++){
-            int num = Integer.parseInt(st.nextToken());
-            int cnt = 1;
-            if(map.containsKey(num)) {
-                cnt += map.get(num);
-                map.remove(num);
-            }
-            map.put(num, cnt);
-        }
 
+        // 1. 입력 받기
+        int N = Integer.parseInt(br.readLine());
+        int[] arr = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i = 0 ; i < N ; i++) arr[i] = Integer.parseInt(st.nextToken());
+
+        Arrays.parallelSort(arr);
+
+        // 2. 찾기
         int M = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine());
-        for(int i = 0 ; i < M ; i++) {
-            int num = Integer.parseInt(st.nextToken());
-            if(map.containsKey(num)) sb.append(map.get(num) + " ");
-            else sb.append(0 + " ");
+        find: for(int i = 0 ; i < M ; i++) {
+            int target = Integer.parseInt(st.nextToken());
+            int sp = 0;
+            int ep = N;
+            int mid = (ep+sp) / 2;
+
+            while(sp < ep) {
+                if(arr[mid] >= target) ep = mid;
+                else sp = mid+1;
+                mid = (ep+sp) / 2;
+            }
+            int minIdx = sp;
+
+            sp = 0;
+            ep = N;
+            mid = (ep+sp) / 2;
+            while(sp < ep) {
+                if(arr[mid] > target) ep = mid;
+                else sp = mid+1;
+                mid = (ep+sp) / 2;
+            }
+            int maxIdx = sp;
+            sb.append(maxIdx - minIdx).append("\n");
         }
         System.out.println(sb);
     }
