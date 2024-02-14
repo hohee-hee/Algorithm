@@ -2,47 +2,37 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws IOException{
+        StringBuilder sb = new StringBuilder();
 
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		st = new StringTokenizer(br.readLine());
-		int[] arr = new int[N];
-		
-		for(int i = 0 ; i < N ; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		int lp = 0;
-		int rp = 0;
-		int sum = 0;
-		int answer = 0;
-		while(true){
-			sum = 0;
-			
-			//sum 구해주기
-			for(int i = lp ; i <= rp ; i++) {
-				sum += arr[i];
-			}
-			
-			//포인터 이동하기
-			if(sum == M) {
-				answer++;
-				lp++;
-			}
-			
-			else if(sum < M) { rp++; }
-			
-			else { lp++; }
-			
-			if(lp > rp) { rp++;}
-			
-			if(lp == N || rp == N) break;
-		}
-		
-		System.out.println(answer);
-		
-	}
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int[] arr = new int[N];
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0 ; i < N ; i++) arr[i] = Integer.parseInt(st.nextToken());
+
+        long[] sum = new long[N+1];
+        for(int i = 1 ; i <= N ; i++) sum[i] = sum[i-1] + arr[i-1];
+
+        int lp = 0;
+        int rp = 1;
+        long answer = 0;
+        while(lp <= rp && rp < N+1) {
+            long curr = sum[rp] - sum[lp];
+
+            if(curr > M) {
+                lp++;
+            } else {
+                if(curr == M) answer++;
+                rp++;
+            }
+        }
+
+
+        System.out.println(answer);
+    }
 }
+
