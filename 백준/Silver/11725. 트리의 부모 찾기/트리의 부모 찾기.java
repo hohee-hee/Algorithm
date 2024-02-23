@@ -8,39 +8,34 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        ArrayList<Integer>[] children = new ArrayList[N+1];
-        for(int i = 0 ; i < N+1 ; i++) children[i] = new ArrayList<>();
-
-        for(int i = 0 ; i < N - 1 ; i++){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int num1 = Integer.parseInt(st.nextToken());
-            int num2 = Integer.parseInt(st.nextToken());
-
-            children[num1].add(num2);
-            children[num2].add(num1);
+        ArrayList<Integer>[] graph = new ArrayList[N+1];
+        for(int i = 1 ; i <= N ; i++) graph[i] = new ArrayList<>();
+        StringTokenizer st;
+        for(int i = 1 ; i < N ; i++) {
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            graph[u].add(v);
+            graph[v].add(u);
         }
 
-        // BFS
         int[] parent = new int[N+1];
-        boolean[] isVisited = new boolean[N+1];
+        Arrays.fill(parent, -1);
         ArrayDeque<Integer> q = new ArrayDeque<>();
-        q.offerFirst(1);
+        q.offerLast(1);
+        while(!q.isEmpty()){
+            int cn = q.pollFirst();
+            for(int i = 0 ; i < graph[cn].size() ; i++) {
+                int nn = graph[cn].get(i);
+                if(parent[nn] != -1) continue;
 
-        while(!q.isEmpty()) {
-            int curr = q.pollLast();
-
-            for(int i = 0 ; i < children[curr].size() ; i++) {
-                int nNode = children[curr].get(i);
-
-                if(isVisited[nNode]) continue;
-
-                parent[children[curr].get(i)] = curr;
-                q.offerFirst(nNode);
-                isVisited[nNode] = true;
+                parent[nn] = cn;
+                if(graph[cn].isEmpty()) continue;
+                q.offerLast(nn);
             }
         }
 
-        for(int i = 2 ; i < N+1; i++) sb.append(parent[i]).append("\n");
+        for(int i = 2 ; i <= N ; i++) sb.append(parent[i]).append("\n");
         System.out.println(sb);
     }
 }
