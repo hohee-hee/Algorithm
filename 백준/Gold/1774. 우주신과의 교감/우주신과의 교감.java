@@ -37,11 +37,12 @@ public class Main {
             public int compare(long[] o1, long[] o2) {
                 if (o1[2] - o2[2] < 0) return -1;
                 return 1;
-                }
+            }
         });
 
         for(int i = 1 ; i <= N ; i++) {
             for(int j = 1 ; j < i ; j++) {
+                if(parent[i] == parent[j]) continue;
                 long width = coordinate[0][i] - coordinate[0][j];
                 long height = coordinate[1][i] - coordinate[1][j];
                 width *= width;
