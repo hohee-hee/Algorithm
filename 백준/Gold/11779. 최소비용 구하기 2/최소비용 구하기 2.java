@@ -1,82 +1,74 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static final int INF = 30000002;
+    public static void main(String[] args) throws IOException{
         StringBuilder sb = new StringBuilder();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        int M = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
 
-        ArrayList<int[]>[] adj = new ArrayList[N+1];
-        for(int i = 0 ; i < N+1 ; i++) adj[i] = new ArrayList<int[]>();
+        ArrayList<int[]>[] graph = new ArrayList[n+1];
+        for(int i = 1 ; i <= n ; i++) graph[i] = new ArrayList<>();
 
-        for(int i = 0 ; i < M ; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int u = Integer.parseInt(st.nextToken());
-            int v = Integer.parseInt(st.nextToken());
-            int w = Integer.parseInt(st.nextToken());
-
-            adj[u].add(new int[]{v,w});
+        StringTokenizer st;
+        for(int i = 0 ; i < m ; i++) {
+            st = new StringTokenizer(br.readLine());
+            int A = Integer.parseInt(st.nextToken());
+            int B = Integer.parseInt(st.nextToken());
+            int C = Integer.parseInt(st.nextToken());
+            graph[A].add(new int[]{B, C});
         }
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int start = Integer.parseInt(st.nextToken());
-        int end = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        int from = Integer.parseInt(st.nextToken());
+        int to = Integer.parseInt(st.nextToken());
 
-        // 다익스트라
-        int[] dist = new int[N+1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-
-        int[] route = new int[N+1];
-        route[start] = -1;
-        dist[start] = 0;
+        int[] min = new int[n+1];
+        Arrays.fill(min, 100000002);
+        int[] pre = new int[n+1];
         PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
                 return o1[1] - o2[1];
             }
         });
+        pq.offer(new int[]{from, 0});
+        min[from] = 0;
+        while(!pq.isEmpty()) {
+            int city = pq.peek()[0];
+            int cost = pq.poll()[1];
+            if(min[city] < cost) continue;
 
-        pq.offer(new int[]{start, 0});
-
-        outer : while(!pq.isEmpty()) {
-            int cn = pq.peek()[0];
-            int cw = pq.poll()[1];
-
-            if(dist[cn] < cw) continue;
-
-            for(int i = 0 ; i < adj[cn].size() ; i++) {
-                int nn = adj[cn].get(i)[0];
-                int nw = cw + adj[cn].get(i)[1];
-
-                if(dist[nn] <= nw) continue;
-
-                pq.offer(new int[]{nn, nw});
-                dist[nn] = nw;
-                route[nn] = cn;
+            for(int i = 0 ; i < graph[city].size() ; i++) {
+                int tCity = graph[city].get(i)[0];
+                int tCost = graph[city].get(i)[1] + min[city];
+                if(tCost < min[tCity]) {
+                    min[tCity] = tCost;
+                    pre[tCity] = city;
+                    pq.offer(new int[]{tCity, tCost});
+                }
             }
         }
+        sb.append(min[to]).append("\n");
 
-        sb.append(dist[end]).append("\n");
-
-        ArrayList<Integer> visit = new ArrayList<>();
-
-        int curr = end;
-        visit.add(curr);
-        while(curr != start) {
-            int next = route[curr];
-            curr = next;
-            visit.add(curr);
+        int cnt = 0;
+        int next = to;
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        while(next != from) {
+            cnt++;
+            stack.offerFirst(next);
+            next = pre[next];
         }
+        cnt++;
+        stack.offerFirst(from);
+        sb.append(cnt).append("\n");
 
-        sb.append(visit.size()).append("\n");
-
-        for(int i = visit.size() - 1 ; i >= 0 ; i--) sb.append(visit.get(i) + " ");
-
+        while(!stack.isEmpty()) {
+            sb.append(stack.pollFirst()).append(" ");
+        }
         System.out.println(sb);
     }
 }
