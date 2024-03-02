@@ -20,33 +20,39 @@ public class Main {
 
         int[] dr = {-1, 0, 1, 0};
         int[] dc = {0, 1, 0, -1};
+        boolean[][] isVisited = new boolean[N+1][M+1];
 
         int[][] brokenWall = new int[N+1][M+1];
         for(int r = 1 ; r <= N ; r++) Arrays.fill(brokenWall[r], N*M);
         brokenWall[1][1] = 0;
-        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                return o1[2] - o2[2];
-            }
-        });
-        pq.offer(new int[]{1, 1, 0});
+        isVisited[1][1] = true;
+        ArrayDeque<int[]> dq = new ArrayDeque<>();
+        dq.offer(new int[]{1, 1, 0});
 
-        while(!pq.isEmpty()) {
-            int cr = pq.peek()[0];
-            int cc = pq.peek()[1];
-            int cw = pq.poll()[2];
-            if(cw >= brokenWall[N][M]) break;
+        bfs: while(!dq.isEmpty()) {
+            int cr = dq.peekFirst()[0];
+            int cc = dq.peekFirst()[1];
+            int cw = dq.pollFirst()[2];
+
             for(int dir = 0 ; dir < 4 ; dir++) {
                 int nr = cr + dr[dir];
                 int nc = cc + dc[dir];
 
-                if(nr < 1 || nc < 1 || nr > N || nc > M) continue;
+                if(nr == N && nc == M) {
+                    System.out.println(cw);
+                    return;
+                }
 
-                int nw = maze[nr][nc] ? cw : cw + 1;
-                if(brokenWall[nr][nc] > nw) {
-                    brokenWall[nr][nc] = nw;
-                    pq.offer(new int[]{nr, nc, nw});
+                if(nr < 1 || nc < 1 || nr > N || nc > M) continue;
+                if(isVisited[nr][nc]) continue;
+
+                isVisited[nr][nc] = true;
+                if(maze[nr][nc]) {
+                    brokenWall[nr][nc] = cw;
+                    dq.offerFirst(new int[]{nr, nc, cw});
+                } else {
+                    brokenWall[nr][nc] = cw+1;
+                    dq.offerLast(new int[]{nr, nc, cw+1});
                 }
             }
         }
