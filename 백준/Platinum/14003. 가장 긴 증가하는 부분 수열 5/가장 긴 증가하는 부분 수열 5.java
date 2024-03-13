@@ -18,8 +18,9 @@ public class Main{
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i = 0 ; i < N ; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
-            int idx = Arrays.binarySearch(len, arr[i]);
+            int idx = Arrays.binarySearch(len, 0, answer + 1, arr[i]);
 
+            
             if(idx >= 0) {
                 rec[i] = idx;
                 continue;
@@ -33,15 +34,12 @@ public class Main{
 
         sb.append(answer).append("\n");
 
-        ArrayDeque<Integer> stack = new ArrayDeque<>();
-        int curr = answer - 1;
+        int curr = answer-1;
+        int[] LIS = new int[answer];
         for(int i = N-1 ; i >=0 ; i--) {
-            if(rec[i] != curr) continue;
-            stack.offerFirst(arr[i]);
-            curr--;
+            if(rec[i] == curr) LIS[curr--] = arr[i];
         }
-
-        while(!stack.isEmpty()) sb.append(stack.pollFirst() +  " ");
+        for(int i = 0 ; i < answer ; i++) sb.append(LIS[i] + " ");
         System.out.println(sb);
     }
 }
